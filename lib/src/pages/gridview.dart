@@ -18,7 +18,7 @@ class GridViews extends StatelessWidget {
       return lista;
     }
 
-    fetchAlbum();
+    fetchHoras();
     return StaggeredGridView.count(
       shrinkWrap: true,
       crossAxisCount: 5,
@@ -26,6 +26,12 @@ class GridViews extends StatelessWidget {
       physics: new NeverScrollableScrollPhysics(),
       staggeredTiles: _staggeredTiles(),
       children: List.generate(45, (index) {
+        if (index >= 20 && index <= 24) {
+          return Center(
+              child: Container(
+            child: Text('data'),
+          ));
+        }
         return Center(
             child: Tile(
           index: index,
@@ -34,7 +40,7 @@ class GridViews extends StatelessWidget {
     );
   }
 
-  Future<http.Response> fetchAlbum() async {
+  Future<List<dynamic>> fetchHoras() async {
     //print(http.get('https://api.apispreadsheets.com/data/2912/'));
     final response =
         await http.get('https://api.apispreadsheets.com/data/2912/');
@@ -42,8 +48,11 @@ class GridViews extends StatelessWidget {
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      print(http.get(response.body.toString()));
-      return jsonDecode(response.body.toString());
+
+      var data = jsonDecode(response.body)['data'];
+      var reversed = data[1].map((k, v) => MapEntry(v, k));
+      print(reversed[0]);
+      return jsonDecode(response.body)['data'];
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
