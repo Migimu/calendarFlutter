@@ -3,17 +3,21 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class Tile extends StatefulWidget {
-  Tile({Key key, @required this.index}) : super(key: key);
+  Tile({Key key, @required this.index, @required this.datosDias})
+      : super(key: key);
   final int index;
+  final String datosDias;
 
   @override
-  _TileState createState() => _TileState(index);
+  _TileState createState() => _TileState(index, datosDias);
 }
 
 class _TileState extends State<Tile> {
   int index;
-  _TileState(int index) {
+  String datosDias;
+  _TileState(int index, String datosDias) {
     this.index = index;
+    this.datosDias = datosDias;
   }
 
   //_TileState(int index);
@@ -30,6 +34,7 @@ class _TileState extends State<Tile> {
 
   @override
   Widget build(BuildContext context) {
+    print(datosDias);
     return Center(
         child: InkWell(
       child: Container(

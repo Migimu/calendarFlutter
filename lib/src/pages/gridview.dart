@@ -13,28 +13,36 @@ class GridViews extends StatelessWidget {
     List<StaggeredTile> _staggeredTiles() {
       List<StaggeredTile> lista = [];
       for (var i = 0; i < 45; i++) {
+        if (i == 20) {
+          lista.add(const StaggeredTile.count(5, 1));
+        }
         lista.add(const StaggeredTile.count(1, 1));
       }
       return lista;
     }
 
-    fetchHoras();
+    Future<List<dynamic>> listaHoras = fetchHoras();
     return StaggeredGridView.count(
       shrinkWrap: true,
       crossAxisCount: 5,
       primary: true,
       physics: new NeverScrollableScrollPhysics(),
       staggeredTiles: _staggeredTiles(),
-      children: List.generate(45, (index) {
-        if (index >= 20 && index <= 24) {
-          return Center(
+      children: List.generate(41, (index) {
+        if (index == 20) {
+          return Container(
+            child: Center(
               child: Container(
-            child: Text('data'),
-          ));
+                child: Text('Patio'),
+              ),
+            ),
+            color: Colors.amber[200],
+          );
         }
         return Center(
             child: Tile(
           index: index,
+          datosDias: listaHoras[0],
         ));
       }),
     );
@@ -50,8 +58,7 @@ class GridViews extends StatelessWidget {
       // then parse the JSON.
 
       var data = jsonDecode(response.body)['data'];
-      var reversed = data[1].map((k, v) => MapEntry(v, k));
-      print(reversed[0]);
+      print(data[1].keys.toString().split(',')[1]);
       return jsonDecode(response.body)['data'];
     } else {
       // If the server did not return a 200 OK response,
