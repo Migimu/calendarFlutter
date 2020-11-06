@@ -22,30 +22,51 @@ class GridViews extends StatelessWidget {
     }
 
     Future<List<dynamic>> listaHoras = fetchHoras();
-    return StaggeredGridView.count(
-      shrinkWrap: true,
-      crossAxisCount: 5,
-      primary: true,
-      physics: new NeverScrollableScrollPhysics(),
-      staggeredTiles: _staggeredTiles(),
-      children: List.generate(41, (index) {
-        if (index == 20) {
-          return Container(
-            child: Center(
-              child: Container(
-                child: Text('Patio'),
-              ),
-            ),
-            color: Colors.amber[200],
-          );
-        }
-        return Center(
-            child: Tile(
-          index: index,
-          datosDias: listaHoras[0],
-        ));
-      }),
-    );
+    return FutureBuilder(
+        future: fetchHoras(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            int cont = 0;
+            print(snapshot.data);
+            return StaggeredGridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 5,
+              primary: true,
+              physics: new NeverScrollableScrollPhysics(),
+              staggeredTiles: _staggeredTiles(),
+              children: List.generate(41, (index) {
+                if (index == 20) {
+                  return Container(
+                    child: Center(
+                      child: Container(
+                        child: Text('Patio'),
+                      ),
+                    ),
+                    color: Colors.amber[200],
+                  );
+                }
+                List dias = ['L', 'M', 'X', 'J', 'V'];
+
+                /*print(index % 4);
+                var data = snapshot.data[1].keys.toString().split(',');
+                if (index % 4 == 1) {
+                  cont++;
+                }
+                print(cont);
+                print(snapshot.data[4][dias[4]]);*/
+
+                int x = 0, y = 0;
+                print(snapshot.data[x][dias[y]]);
+                return Center(
+                    child: Tile(
+                  index: index,
+                  datosDias: snapshot.data[x],
+                ));
+              }),
+            );
+          }
+          return Column(children: [Center(child: CircularProgressIndicator())]);
+        });
   }
 
   Future<List<dynamic>> fetchHoras() async {
@@ -57,8 +78,8 @@ class GridViews extends StatelessWidget {
       // If the server did return a 200 OK response,
       // then parse the JSON.
 
-      var data = jsonDecode(response.body)['data'];
-      print(data[1].keys.toString().split(',')[1]);
+      //var data = jsonDecode(response.body)['data'];
+      //print(data[1].keys.toString().split(',')[1]);
       return jsonDecode(response.body)['data'];
     } else {
       // If the server did not return a 200 OK response,

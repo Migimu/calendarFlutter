@@ -6,7 +6,7 @@ class Tile extends StatefulWidget {
   Tile({Key key, @required this.index, @required this.datosDias})
       : super(key: key);
   final int index;
-  final String datosDias;
+  final Map datosDias;
 
   @override
   _TileState createState() => _TileState(index, datosDias);
@@ -14,8 +14,8 @@ class Tile extends StatefulWidget {
 
 class _TileState extends State<Tile> {
   int index;
-  String datosDias;
-  _TileState(int index, String datosDias) {
+  Map datosDias;
+  _TileState(int index, Map datosDias) {
     this.index = index;
     this.datosDias = datosDias;
   }
@@ -34,7 +34,7 @@ class _TileState extends State<Tile> {
 
   @override
   Widget build(BuildContext context) {
-    print(datosDias);
+    //print(datosDias);
     return Center(
         child: InkWell(
       child: Container(

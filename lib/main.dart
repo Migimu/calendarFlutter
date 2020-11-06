@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
             children: [
               Tile(
                 index: 1,
+                datosDias: null,
               ),
               Dialog(),
               Vista()
