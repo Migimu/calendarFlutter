@@ -6,7 +6,7 @@ class Tile extends StatefulWidget {
   Tile({Key key, @required this.index, @required this.datosDias})
       : super(key: key);
   final int index;
-  final Map datosDias;
+  final String datosDias;
 
   @override
   _TileState createState() => _TileState(index, datosDias);
@@ -14,8 +14,8 @@ class Tile extends StatefulWidget {
 
 class _TileState extends State<Tile> {
   int index;
-  Map datosDias;
-  _TileState(int index, Map datosDias) {
+  String datosDias;
+  _TileState(int index, String datosDias) {
     this.index = index;
     this.datosDias = datosDias;
   }
@@ -27,23 +27,28 @@ class _TileState extends State<Tile> {
   final field1Controller = TextEditingController();
   final field2Controller = TextEditingController();
   final field3Controller = TextEditingController();
-  Color pickerColor = Color(0xff443a49);
-  Color currentColor = Color(0xff443a49);
+  Color pickerColor = Colors.white;
+  Color currentColor = Colors.white;
   bool hasBeenPressed = false;
   Color colorNuevo;
 
   @override
   Widget build(BuildContext context) {
     //print(datosDias);
+    if (this.datosDias != null) {
+      profesor = this.datosDias;
+      field2Controller.text = this.datosDias;
+    }
+
     return Center(
         child: InkWell(
       child: Container(
         decoration: BoxDecoration(
           color: pickerColor,
-          /*border: Border.all(
+          border: Border.all(
             color: Colors.black,
             width: 1,
-          ),*/
+          ),
         ),
         width: 70.0,
         height: 70.0,
