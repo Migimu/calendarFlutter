@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:http/http.dart' as http;
 
 class Tile extends StatefulWidget {
   Tile({Key key, @required this.index, @required this.datosDias})
@@ -34,10 +36,9 @@ class _TileState extends State<Tile> {
 
   @override
   Widget build(BuildContext context) {
-    //print(datosDias);
     if (this.datosDias != null) {
+      //field2Controller.text = this.datosDias;
       profesor = this.datosDias;
-      field2Controller.text = this.datosDias;
     }
 
     return Center(
@@ -54,18 +55,15 @@ class _TileState extends State<Tile> {
         height: 70.0,
         child: Column(
           children: [
-            Text(departamento),
-            Text(profesor),
-            Text(notasAdicionales)
+            Flexible(
+              child: Text(departamento),
+            ),
+            Flexible(child: Text(profesor)),
+            Flexible(child: Text(notasAdicionales)),
           ],
         ),
       ),
       onTap: () {
-        void changeColor(Color color) {
-          print(color == "MaterialColor(primary value: Color(0xff2196f3)");
-          setState(() => pickerColor = color);
-        }
-
         var column = ListView(
           padding: const EdgeInsets.all(8),
           children: <Widget>[
@@ -123,7 +121,6 @@ class _TileState extends State<Tile> {
               child: Text("Save"),
               color: Colors.amber[300],
               onPressed: () {
-                Navigator.pop(context);
                 setState(() {
                   departamento = field1Controller.text;
                 });
@@ -134,14 +131,12 @@ class _TileState extends State<Tile> {
                   notasAdicionales = field3Controller.text;
                 });
                 pickerColor = colorNuevo;
-                /*setState(() {
-                  StaggeredTile.count(index, index + 8);
-                });*/
                 print(field1Controller.text);
                 print(field2Controller.text);
                 print(field3Controller.text);
                 print(index);
                 print(index + 8);
+                Navigator.pop(context);
               },
             )
           ],
@@ -157,6 +152,27 @@ class _TileState extends State<Tile> {
     ));
   }
 }
+
+/*Future<http.Response> updateAlbum(String title) {
+  return http.put(
+    'https://jsonplaceholder.typicode.com/albums/1',
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      "data":
+        "Horas":string"8:00"
+        "L":string"Santi"
+        "M":string""
+        "X":string""
+        "J":string""
+        "V":string""
+
+        "query":string"select*from3284whereHoras='8:00'"
+
+    }),
+  );
+}*/
 
 class TileHora extends StatelessWidget {
   const TileHora({Key key, @required this.title}) : super(key: key);

@@ -1,6 +1,5 @@
 import 'package:calendar/src/pages/calendar_legend.dart';
 import 'package:calendar/src/pages/gridview.dart';
-import 'package:calendar/src/pages/tile.dart';
 import 'package:flutter/material.dart';
 
 class Grid extends StatelessWidget {

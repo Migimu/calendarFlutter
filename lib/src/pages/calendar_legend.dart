@@ -1,19 +1,5 @@
 import 'package:calendar/src/pages/tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-
-List<StaggeredTile> _staggeredTiles = const <StaggeredTile>[
-  const StaggeredTile.count(2, 2),
-  const StaggeredTile.count(2, 1),
-  const StaggeredTile.count(1, 2),
-  const StaggeredTile.count(1, 1),
-  const StaggeredTile.count(2, 2),
-  const StaggeredTile.count(1, 2),
-  const StaggeredTile.count(1, 1),
-  const StaggeredTile.count(3, 1),
-  const StaggeredTile.count(1, 1),
-  const StaggeredTile.count(4, 1),
-];
 
 class LegendaC extends StatelessWidget {
   const LegendaC({Key key}) : super(key: key);
