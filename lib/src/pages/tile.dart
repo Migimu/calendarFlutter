@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class Tile extends StatefulWidget {
-  Tile({Key key, @required this.index, @required this.datosDias})
+  Tile(
+      {Key key,
+      @required this.index,
+      @required this.datosDias,
+      @required this.notifyParent})
       : super(key: key);
+  final Function() notifyParent;
   final int index;
   final String datosDias;
 
@@ -34,10 +40,17 @@ class _TileState extends State<Tile> {
 
   @override
   Widget build(BuildContext context) {
-    //print(datosDias);
-    if (this.datosDias != null) {
-      profesor = this.datosDias;
-      field2Controller.text = this.datosDias;
+    List datos = this.datosDias.split('|');
+    //print(datos.length > 1);
+    if (datos != []) {
+      profesor = datos[1] as String;
+      field2Controller.text = datos[1] as String;
+
+      departamento = datos[0] as String;
+      field1Controller.text = datos[0] as String;
+
+      notasAdicionales = datos[2] as String;
+      field3Controller.text = datos[2] as String;
     }
 
     return Center(
@@ -54,9 +67,9 @@ class _TileState extends State<Tile> {
         height: 70.0,
         child: Column(
           children: [
-            Text(departamento),
-            Text(profesor),
-            Text(notasAdicionales)
+            Flexible(child: Text(departamento)),
+            Flexible(child: Text(profesor)),
+            Flexible(child: Text(notasAdicionales))
           ],
         ),
       ),
@@ -71,7 +84,7 @@ class _TileState extends State<Tile> {
           children: <Widget>[
             TextField(
               decoration: InputDecoration(
-                hintText: "Nombre departamento", /* border: InputBorder.none*/
+                hintText: "Nombre clase", /* border: InputBorder.none*/
               ),
               controller: field1Controller,
             ),
@@ -109,16 +122,16 @@ class _TileState extends State<Tile> {
               ),
               height: 270,
             ),
-            FlatButton(
-                child: Text("Dos horas?"),
-                //color: hasBeenPressed ? Colors.green[200] : Colors.red[300],
-                onPressed: () => {
-                      setState(() {
-                        hasBeenPressed = !hasBeenPressed;
-                        print(hasBeenPressed);
-                        this.currentColor = Colors.green[200];
-                      })
-                    }),
+            CheckboxListTile(
+              title: const Text('DOS HORAS?'),
+              value: timeDilation != 1.0,
+              onChanged: (bool value) {
+                setState(() {
+                  timeDilation = value ? 1.0 : 1.0;
+                });
+              },
+              secondary: const Icon(Icons.hourglass_empty),
+            ),
             FlatButton(
               child: Text("Save"),
               color: Colors.amber[300],

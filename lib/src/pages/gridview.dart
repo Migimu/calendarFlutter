@@ -5,27 +5,57 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
 
-class GridViews extends StatelessWidget {
+class GridViews extends StatefulWidget {
   const GridViews({Key key}) : super(key: key);
 
   @override
+  _GridViewsState createState() => _GridViewsState();
+}
+
+class _GridViewsState extends State<GridViews> {
+  Future<List<dynamic>> listaHoras = null;
+  @override
+  void initState() {
+    super.initState();
+    listaHoras = fetchHoras();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<StaggeredTile> _staggeredTiles() {
+    List<StaggeredTile> _staggeredTiles(AsyncSnapshot snapshot) {
+      int x = 0, y = -1;
+      List dias = ['L', 'M', 'X', 'J', 'V'];
       List<StaggeredTile> lista = [];
       for (var i = 0; i <= 45; i++) {
+        if (y < 4) {
+          y++;
+        } else {
+          y = 0;
+          if (i < 45) {
+            x++;
+          }
+          if (x != 4) {}
+        }
+        //print('X: $x Y: $y INDEX: $i');
         if (i == 20) {
           lista.add(const StaggeredTile.count(5, 1));
         }
-        lista.add(const StaggeredTile.count(1, 1));
+        if (x != 4) {
+          print(snapshot.data[x][dias[y]].split('|')[4] == 2);
+          if (snapshot.data[x][dias[y]].split('|')[4] == "2") {
+            if ((x != 0 && x != 5) &&
+                (snapshot.data[x - 1][dias[y]].split('|')[4] != 2)) {
+              lista.add(const StaggeredTile.count(1, 2));
+            }
+          }
+          if (snapshot.data[x][dias[y]].split('|')[4] == 1 ||
+              snapshot.data[x][dias[y]].split('|')[4] == "") {
+            lista.add(const StaggeredTile.count(1, 1));
+          }
+        }
+        print(snapshot.data[x][dias[y]].split('|'));
       }
       return lista;
-    }
-
-    Future<List<dynamic>> listaHoras = null;
-    @override
-    void initState() {
-      //super.initState();
-      listaHoras = fetchHoras();
     }
 
     List<Widget> _tiles(
@@ -43,7 +73,7 @@ class GridViews extends StatelessWidget {
             data = snapshot.data[x][dias[y]];
           }
           y++;
-          print('$y');
+          //print('$y');
         } else {
           y = 0;
           x++;
@@ -51,13 +81,13 @@ class GridViews extends StatelessWidget {
             data = snapshot.data[x][dias[y]];
             y++;
           }
-          print('$y');
+          //print('$y');
         }
 
         if (x == 4) {
           //index = 20;
         }
-        print('X: $x Y: $y DATA: $data INDEX: $index');
+        //print('X: $x Y: $y DATA: $data INDEX: $index');
 
         if (index == 21) {
           lista.add(Container(
@@ -69,14 +99,27 @@ class GridViews extends StatelessWidget {
             color: Colors.amber[200],
           ));
         }
+
         if (x != 4) {
-          lista.add(Center(
-              child: Tile(
-            index: index,
-            datosDias: data,
-          )));
+          print('X: $x Y: $y-1 INDEX: $index');
+          print(y - 1);
+          if (snapshot.data[x][dias[y - 1]].split('|')[4] == "2") {
+            if (((x != 0 && x != 5) &&
+                    (snapshot.data[x - 1][dias[y - 1]].split('|')[4] != 2)) ||
+                snapshot.data[x][dias[y - 1]].split('|')[4] == 1 ||
+                snapshot.data[x][dias[y - 1]].split('|')[4] == "") {
+              print(snapshot.data[x][dias[y - 1]]);
+              lista.add(Center(
+                  child: Tile(
+                index: index,
+                datosDias: data,
+                notifyParent: refresh,
+              )));
+            }
+          }
         }
       }
+      print(lista);
       return lista;
     }
 
@@ -87,17 +130,21 @@ class GridViews extends StatelessWidget {
           if (snapshot.hasData) {
             int cont = 0;
 
-            print(snapshot.data);
+            //print(snapshot.data);
             return StaggeredGridView.count(
                 shrinkWrap: true,
                 crossAxisCount: 5,
                 primary: true,
                 physics: new NeverScrollableScrollPhysics(),
-                staggeredTiles: _staggeredTiles(),
+                staggeredTiles: _staggeredTiles(snapshot),
                 children: _tiles(snapshot));
           }
           return Column(children: [Center(child: CircularProgressIndicator())]);
         });
+  }
+
+  refresh() {
+    setState(() {});
   }
 
   Future<List<dynamic>> fetchHoras() async {
