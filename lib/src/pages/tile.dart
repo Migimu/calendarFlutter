@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:http/http.dart' as http;
 
 class Tile extends StatefulWidget {
   Tile(
@@ -37,17 +39,23 @@ class _TileState extends State<Tile> {
   Color currentColor = Colors.white;
   bool hasBeenPressed = false;
   Color colorNuevo;
+  String dropdownValue = '';
 
   @override
   Widget build(BuildContext context) {
     List datos = this.datosDias.split('|');
     //print(datos.length > 1);
     if (datos != []) {
-      profesor = datos[1] as String;
-      field2Controller.text = datos[1] as String;
+      profesor = datos[0] as String;
+      field2Controller.text = datos[0] as String;
 
-      departamento = datos[0] as String;
-      field1Controller.text = datos[0] as String;
+      departamento = datos[1] as String;
+      field1Controller.text = datos[1] as String;
+      if (datos[1] as String == '') {
+        dropdownValue = 'AADD';
+      } else {
+        dropdownValue = datos[1] as String;
+      }
 
       notasAdicionales = datos[2] as String;
       field3Controller.text = datos[2] as String;
@@ -74,19 +82,31 @@ class _TileState extends State<Tile> {
         ),
       ),
       onTap: () {
-        void changeColor(Color color) {
-          print(color == "MaterialColor(primary value: Color(0xff2196f3)");
-          setState(() => pickerColor = color);
-        }
-
         var column = ListView(
           padding: const EdgeInsets.all(8),
           children: <Widget>[
-            TextField(
-              decoration: InputDecoration(
-                hintText: "Nombre clase", /* border: InputBorder.none*/
+            DropdownButton<String>(
+              value: dropdownValue,
+              icon: Icon(Icons.arrow_downward),
+              iconSize: 24,
+              elevation: 16,
+              style: TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 2,
+                color: Colors.deepPurpleAccent,
               ),
-              controller: field1Controller,
+              onChanged: (String newValue) {
+                setState(() {
+                  dropdownValue = newValue;
+                });
+              },
+              items: <String>['AADD', 'DI', 'SGE', 'PSP', 'PMDM']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
             Divider(
               height: 10,
@@ -136,7 +156,6 @@ class _TileState extends State<Tile> {
               child: Text("Save"),
               color: Colors.amber[300],
               onPressed: () {
-                Navigator.pop(context);
                 setState(() {
                   departamento = field1Controller.text;
                 });
@@ -147,14 +166,12 @@ class _TileState extends State<Tile> {
                   notasAdicionales = field3Controller.text;
                 });
                 pickerColor = colorNuevo;
-                /*setState(() {
-                  StaggeredTile.count(index, index + 8);
-                });*/
                 print(field1Controller.text);
                 print(field2Controller.text);
                 print(field3Controller.text);
                 print(index);
                 print(index + 8);
+                Navigator.pop(context);
               },
             )
           ],
@@ -170,6 +187,27 @@ class _TileState extends State<Tile> {
     ));
   }
 }
+
+/*Future<http.Response> updateAlbum(String title) {
+  return http.put(
+    'https://jsonplaceholder.typicode.com/albums/1',
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      "data":
+        "Horas":string"8:00"
+        "L":string"Santi"
+        "M":string""
+        "X":string""
+        "J":string""
+        "V":string""
+
+        "query":string"select*from3284whereHoras='8:00'"
+
+    }),
+  );
+}*/
 
 class TileHora extends StatelessWidget {
   const TileHora({Key key, @required this.title}) : super(key: key);

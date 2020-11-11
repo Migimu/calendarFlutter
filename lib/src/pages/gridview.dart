@@ -26,35 +26,38 @@ class _GridViewsState extends State<GridViews> {
       int x = 0, y = -1;
       List dias = ['L', 'M', 'X', 'J', 'V'];
       List<StaggeredTile> lista = [];
-      for (var i = 0; i <= 45; i++) {
+      for (var i = 0; i <= 40; i++) {
         if (y < 4) {
           y++;
         } else {
           y = 0;
-          if (i < 45) {
+          if (i < 40) {
             x++;
           }
           if (x != 4) {}
         }
-        //print('X: $x Y: $y INDEX: $i');
+        print('X: $x Y: $y INDEX: $i');
         if (i == 20) {
           lista.add(const StaggeredTile.count(5, 1));
         }
         if (x != 4) {
-          print(snapshot.data[x][dias[y]].split('|')[4] == 2);
+          print(snapshot.data[x][dias[y]].split('|')[4] == "2");
           if (snapshot.data[x][dias[y]].split('|')[4] == "2") {
-            if ((x != 0 && x != 5) &&
-                (snapshot.data[x - 1][dias[y]].split('|')[4] != 2)) {
+            if (x != 0 &&
+                (snapshot.data[x][dias[y]] == snapshot.data[x - 1][dias[y]])) {
               lista.add(const StaggeredTile.count(1, 2));
+              print("1,2");
             }
           }
-          if (snapshot.data[x][dias[y]].split('|')[4] == 1 ||
+          if (snapshot.data[x][dias[y]].split('|')[4] == "1" ||
               snapshot.data[x][dias[y]].split('|')[4] == "") {
             lista.add(const StaggeredTile.count(1, 1));
+            print("1,1");
           }
         }
         print(snapshot.data[x][dias[y]].split('|'));
       }
+
       return lista;
     }
 
@@ -63,7 +66,7 @@ class _GridViewsState extends State<GridViews> {
     ) {
       List<Widget> lista = [];
       int x = 0, y = 0;
-      for (var index = 0; index <= 45; index++) {
+      for (var index = 0; index <= 40; index++) {
         List dias = ['L', 'M', 'X', 'J', 'V'];
 
         var data = null;
@@ -104,11 +107,10 @@ class _GridViewsState extends State<GridViews> {
           print('X: $x Y: $y-1 INDEX: $index');
           print(y - 1);
           if (snapshot.data[x][dias[y - 1]].split('|')[4] == "2") {
-            if (((x != 0 && x != 5) &&
-                    (snapshot.data[x - 1][dias[y - 1]].split('|')[4] != 2)) ||
-                snapshot.data[x][dias[y - 1]].split('|')[4] == 1 ||
-                snapshot.data[x][dias[y - 1]].split('|')[4] == "") {
-              print(snapshot.data[x][dias[y - 1]]);
+            print(snapshot.data[x][dias[y - 1]]);
+            if (x != 0 &&
+                (snapshot.data[x][dias[y - 1]] ==
+                    snapshot.data[x - 1][dias[y - 1]])) {
               lista.add(Center(
                   child: Tile(
                 index: index,
@@ -116,6 +118,15 @@ class _GridViewsState extends State<GridViews> {
                 notifyParent: refresh,
               )));
             }
+          }
+          if (snapshot.data[x][dias[y - 1]].split('|')[4] == "1" ||
+              snapshot.data[x][dias[y - 1]].split('|')[4] == "") {
+            lista.add(Center(
+                child: Tile(
+              index: index,
+              datosDias: data,
+              notifyParent: refresh,
+            )));
           }
         }
       }
@@ -158,7 +169,7 @@ class _GridViewsState extends State<GridViews> {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to load album');
+      throw Exception('Failed to load data');
     }
   }
 }
