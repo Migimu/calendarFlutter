@@ -4,28 +4,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 class Tile extends StatefulWidget {
   Tile(
       {Key key,
       @required this.index,
       @required this.datosDias,
-      @required this.notifyParent})
+      @required this.notifyParent,
+      @required this.lista})
       : super(key: key);
   final Function() notifyParent;
-  final int index;
+  final String index;
   final String datosDias;
+  final List lista;
 
   @override
-  _TileState createState() => _TileState(index, datosDias);
+  _TileState createState() => _TileState(index, datosDias, lista);
 }
 
 class _TileState extends State<Tile> {
-  int index;
+  String index;
   String datosDias;
-  _TileState(int index, String datosDias) {
+  List lista;
+  _TileState(String index, String datosDias, List lista) {
     this.index = index;
     this.datosDias = datosDias;
+    this.lista = lista;
   }
 
   //_TileState(int index);
@@ -46,9 +51,6 @@ class _TileState extends State<Tile> {
     List datos = this.datosDias.split('|');
     //print(datos.length > 1);
     if (datos != []) {
-      profesor = datos[0] as String;
-      field2Controller.text = datos[0] as String;
-
       departamento = datos[1] as String;
       field1Controller.text = datos[1] as String;
       if (datos[1] as String == '') {
@@ -57,8 +59,18 @@ class _TileState extends State<Tile> {
         dropdownValue = datos[1] as String;
       }
 
+      profesor = datos[0] as String;
+      field2Controller.text = datos[0] as String;
+
       notasAdicionales = datos[2] as String;
       field3Controller.text = datos[2] as String;
+    }
+
+    double height = 0;
+    if (datos[4] == "2") {
+      height = 140.0;
+    } else {
+      height = 70.0;
     }
 
     return Center(
@@ -72,7 +84,7 @@ class _TileState extends State<Tile> {
           ),
         ),
         width: 70.0,
-        height: 70.0,
+        height: height,
         child: Column(
           children: [
             Flexible(child: Text(departamento)),
@@ -166,11 +178,18 @@ class _TileState extends State<Tile> {
                   notasAdicionales = field3Controller.text;
                 });
                 pickerColor = colorNuevo;
-                print(field1Controller.text);
-                print(field2Controller.text);
-                print(field3Controller.text);
-                print(index);
-                print(index + 8);
+                //print(field1Controller.text);
+                //print(field2Controller.text);
+                //print(field3Controller.text);
+                //print(index);
+                //print(index + 8);
+                String datos = field2Controller.text +
+                    "|" +
+                    field1Controller.text +
+                    "|" +
+                    field3Controller.text +
+                    "||1";
+                updateAlbum(lista, index, datos);
                 Navigator.pop(context);
               },
             )
@@ -188,26 +207,21 @@ class _TileState extends State<Tile> {
   }
 }
 
-/*Future<http.Response> updateAlbum(String title) {
+Future<http.Response> updateAlbum(
+    List listadatos, String index, String datos) async {
+  print('object');
+  listadatos[0][index] = datos;
+  print(datos);
   return http.put(
     'https://jsonplaceholder.typicode.com/albums/1',
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(<String, String>{
-      "data":
-        "Horas":string"8:00"
-        "L":string"Santi"
-        "M":string""
-        "X":string""
-        "J":string""
-        "V":string""
-
-        "query":string"select*from3284whereHoras='8:00'"
-
+    body: convert.jsonEncode(<String, List>{
+      'data': listadatos,
     }),
   );
-}*/
+}
 
 class TileHora extends StatelessWidget {
   const TileHora({Key key, @required this.title}) : super(key: key);

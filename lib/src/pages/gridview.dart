@@ -43,10 +43,12 @@ class _GridViewsState extends State<GridViews> {
         if (x != 4) {
           print(snapshot.data[x][dias[y]].split('|')[4] == "2");
           if (snapshot.data[x][dias[y]].split('|')[4] == "2") {
-            if (x != 0 &&
-                (snapshot.data[x][dias[y]] == snapshot.data[x - 1][dias[y]])) {
+            if ((x != 0 && x != 5) &&
+                (snapshot.data[x][dias[y]] != snapshot.data[x - 1][dias[y]])) {
               lista.add(const StaggeredTile.count(1, 2));
               print("1,2");
+            } else if ((x == 0 || x == 5)) {
+              lista.add(const StaggeredTile.count(1, 2));
             }
           }
           if (snapshot.data[x][dias[y]].split('|')[4] == "1" ||
@@ -57,7 +59,7 @@ class _GridViewsState extends State<GridViews> {
         }
         print(snapshot.data[x][dias[y]].split('|'));
       }
-
+      print(lista.length);
       return lista;
     }
 
@@ -104,18 +106,27 @@ class _GridViewsState extends State<GridViews> {
         }
 
         if (x != 4) {
-          print('X: $x Y: $y-1 INDEX: $index');
-          print(y - 1);
+          //print('X: $x Y: $y-1 INDEX: $index');
+          //print(y - 1);
           if (snapshot.data[x][dias[y - 1]].split('|')[4] == "2") {
-            print(snapshot.data[x][dias[y - 1]]);
-            if (x != 0 &&
-                (snapshot.data[x][dias[y - 1]] ==
+            //print(snapshot.data[x][dias[y - 1]]);
+            if ((x != 0 && x != 5) &&
+                (snapshot.data[x][dias[y - 1]] !=
                     snapshot.data[x - 1][dias[y - 1]])) {
               lista.add(Center(
                   child: Tile(
-                index: index,
+                index: dias[y - 1],
                 datosDias: data,
                 notifyParent: refresh,
+                lista: [snapshot.data[x]],
+              )));
+            } else if ((x == 0 || x == 5)) {
+              lista.add(Center(
+                  child: Tile(
+                index: dias[y - 1],
+                datosDias: data,
+                notifyParent: refresh,
+                lista: [snapshot.data[x]],
               )));
             }
           }
@@ -123,25 +134,21 @@ class _GridViewsState extends State<GridViews> {
               snapshot.data[x][dias[y - 1]].split('|')[4] == "") {
             lista.add(Center(
                 child: Tile(
-              index: index,
+              index: dias[y - 1],
               datosDias: data,
               notifyParent: refresh,
+              lista: [snapshot.data[x]],
             )));
           }
         }
       }
-      print(lista);
       return lista;
     }
 
-    //Future<List<dynamic>> listaHoras = fetchHoras();
     return FutureBuilder(
         future: fetchHoras(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            int cont = 0;
-
-            //print(snapshot.data);
             return StaggeredGridView.count(
                 shrinkWrap: true,
                 crossAxisCount: 5,

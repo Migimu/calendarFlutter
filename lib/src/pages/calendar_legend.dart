@@ -40,10 +40,6 @@ class LegendaC extends StatelessWidget {
         TileHora(
           title: "13:55",
         ),
-        SizedBox(height: 1),
-        TileHora(
-          title: "14:50",
-        )
       ],
     );
   }
@@ -87,8 +83,7 @@ class LegendaGrid extends StatelessWidget {
     "11:40",
     "12:05",
     "13:00",
-    "13:55",
-    "14:50"
+    "13:55"
   ];
   @override
   Widget build(BuildContext context) {
@@ -98,7 +93,7 @@ class LegendaGrid extends StatelessWidget {
       primary: true,
       childAspectRatio: 1.875 / 3,
       physics: new NeverScrollableScrollPhysics(),
-      children: List.generate(9, (index) {
+      children: List.generate(8, (index) {
         return Center(
             child: TileHora(
           title: horas[index],

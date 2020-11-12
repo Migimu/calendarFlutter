@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           body: TabBarView(
             children: [
               Tile(
-                index: 1,
+                index: "L",
                 datosDias: "||||",
               ),
               Dialog(),
