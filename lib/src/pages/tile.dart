@@ -182,10 +182,12 @@ class _TileState extends State<Tile> {
                   setState(() {
                     notasAdicionales = field3Controller.text;
                   });*/
-                  departamento = field1Controller.text;
-                  profesor = field2Controller.text;
-                  notasAdicionales = field3Controller.text;
-                  pickerColor = colorNuevo;
+                  setState(() {
+                    departamento = field1Controller.text;
+                    profesor = field2Controller.text;
+                    notasAdicionales = field3Controller.text;
+                    pickerColor = colorNuevo;
+                  });
                   //print(field1Controller.text);
                   //print(field2Controller.text);
                   //print(field3Controller.text);
