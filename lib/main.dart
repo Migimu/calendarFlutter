@@ -1,5 +1,4 @@
 import 'package:calendar/src/pages/ListView.dart';
-import 'package:calendar/src/pages/tile.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -21,25 +20,9 @@ class MyApp extends StatelessWidget {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            bottom: TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.directions_car)),
-                Tab(icon: Icon(Icons.directions_transit)),
-                Tab(icon: Icon(Icons.directions_bike)),
-              ],
-            ),
             title: Text('Tabs Demo'),
           ),
-          body: TabBarView(
-            children: [
-              Tile(
-                index: "L",
-                datosDias: "||||",
-              ),
-              Dialog(),
-              Vista()
-            ],
-          ),
+          body: Vista(),
         ),
       ),
     );

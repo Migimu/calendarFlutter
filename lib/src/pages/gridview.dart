@@ -118,7 +118,8 @@ class _GridViewsState extends State<GridViews> {
                 index: dias[y - 1],
                 datosDias: data,
                 notifyParent: refresh,
-                lista: [snapshot.data[x]],
+                lista: snapshot.data,
+                posX: x,
               )));
             } else if ((x == 0 || x == 5)) {
               lista.add(Center(
@@ -126,7 +127,8 @@ class _GridViewsState extends State<GridViews> {
                 index: dias[y - 1],
                 datosDias: data,
                 notifyParent: refresh,
-                lista: [snapshot.data[x]],
+                lista: snapshot.data,
+                posX: x,
               )));
             }
           }
@@ -137,7 +139,8 @@ class _GridViewsState extends State<GridViews> {
               index: dias[y - 1],
               datosDias: data,
               notifyParent: refresh,
-              lista: [snapshot.data[x]],
+              lista: snapshot.data,
+              posX: x,
             )));
           }
         }

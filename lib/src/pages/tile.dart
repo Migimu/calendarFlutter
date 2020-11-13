@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:calendar/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -12,25 +11,29 @@ class Tile extends StatefulWidget {
       @required this.index,
       @required this.datosDias,
       @required this.notifyParent,
-      @required this.lista})
+      @required this.lista,
+      @required this.posX})
       : super(key: key);
   final Function() notifyParent;
   final String index;
   final String datosDias;
   final List lista;
+  final int posX;
 
   @override
-  _TileState createState() => _TileState(index, datosDias, lista);
+  _TileState createState() => _TileState(index, datosDias, lista, posX);
 }
 
 class _TileState extends State<Tile> {
   String index;
   String datosDias;
   List lista;
-  _TileState(String index, String datosDias, List lista) {
+  int posX;
+  _TileState(String index, String datosDias, List lista, int posX) {
     this.index = index;
     this.datosDias = datosDias;
     this.lista = lista;
+    this.posX = posX;
   }
 
   //_TileState(int index);
@@ -45,6 +48,7 @@ class _TileState extends State<Tile> {
   bool hasBeenPressed = false;
   Color colorNuevo;
   String dropdownValue = '';
+  String horas = "";
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +76,6 @@ class _TileState extends State<Tile> {
     } else {
       height = 70.0;
     }
-
     return Center(
         child: InkWell(
       child: Container(
@@ -160,6 +163,7 @@ class _TileState extends State<Tile> {
               onChanged: (bool value) {
                 setState(() {
                   timeDilation = value ? 1.0 : 1.0;
+                  horas = value ? "2" : "1";
                 });
               },
               secondary: const Icon(Icons.hourglass_empty),
@@ -188,19 +192,25 @@ class _TileState extends State<Tile> {
                     field1Controller.text +
                     "|" +
                     field3Controller.text +
-                    "||1";
-                updateAlbum(lista, index, datos);
+                    "|" +
+                    colorNuevo.toString() +
+                    "|" +
+                    horas;
+                updateAlbum(lista, index, datos, posX);
+
                 Navigator.pop(context);
+                //main();
               },
             )
           ],
         );
-
-        showDialog(
-            child: Dialog(
-              child: column,
-            ),
-            context: context);
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          showDialog(
+              child: Dialog(
+                child: column,
+              ),
+              context: context);
+        });
         //print(this.index);
       },
     ));
@@ -208,18 +218,19 @@ class _TileState extends State<Tile> {
 }
 
 Future<http.Response> updateAlbum(
-    List listadatos, String index, String datos) async {
-  print('object');
-  listadatos[0][index] = datos;
+    List listadatos, String index, String datos, int x) {
+  http.get(
+      "https://api.apispreadsheets.com/data/2912/?query=deletefrom2912f*'");
+  print(listadatos[x]);
+  listadatos[x][index] = datos;
   print(datos);
-  return http.put(
-    'https://jsonplaceholder.typicode.com/albums/1',
+  print(listadatos);
+  return http.post(
+    'https://api.apispreadsheets.com/data/2912/',
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: convert.jsonEncode(<String, List>{
-      'data': listadatos,
-    }),
+    body: convert.jsonEncode(<String, List>{'data': listadatos}),
   );
 }
 
