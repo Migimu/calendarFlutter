@@ -172,45 +172,47 @@ class _TileState extends State<Tile> {
               child: Text("Save"),
               color: Colors.amber[300],
               onPressed: () {
-                setState(() {
-                  departamento = field1Controller.text;
-                });
-                setState(() {
-                  profesor = field2Controller.text;
-                });
-                setState(() {
-                  notasAdicionales = field3Controller.text;
-                });
-                pickerColor = colorNuevo;
-                //print(field1Controller.text);
-                //print(field2Controller.text);
-                //print(field3Controller.text);
-                //print(index);
-                //print(index + 8);
-                String datos = field2Controller.text +
-                    "|" +
-                    field1Controller.text +
-                    "|" +
-                    field3Controller.text +
-                    "|" +
-                    colorNuevo.toString() +
-                    "|" +
-                    horas;
-                updateAlbum(lista, index, datos, posX);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  setState(() {
+                    departamento = field1Controller.text;
+                  });
+                  setState(() {
+                    profesor = field2Controller.text;
+                  });
+                  setState(() {
+                    notasAdicionales = field3Controller.text;
+                  });
+                  pickerColor = colorNuevo;
+                  //print(field1Controller.text);
+                  //print(field2Controller.text);
+                  //print(field3Controller.text);
+                  //print(index);
+                  //print(index + 8);
+                  String datos = field2Controller.text +
+                      "|" +
+                      field1Controller.text +
+                      "|" +
+                      field3Controller.text +
+                      "|" +
+                      colorNuevo.toString() +
+                      "|" +
+                      horas;
+                  updateAlbum(lista, index, datos, posX);
 
-                Navigator.pop(context);
-                //main();
+                  Navigator.pop(context);
+                  //main();
+                });
               },
             )
           ],
         );
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          showDialog(
-              child: Dialog(
-                child: column,
-              ),
-              context: context);
-        });
+
+        showDialog(
+            child: Dialog(
+              child: column,
+            ),
+            context: context);
+
         //print(this.index);
       },
     ));

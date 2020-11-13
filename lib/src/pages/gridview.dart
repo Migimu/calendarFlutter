@@ -44,7 +44,8 @@ class _GridViewsState extends State<GridViews> {
           print(snapshot.data[x][dias[y]].split('|')[4] == "2");
           if (snapshot.data[x][dias[y]].split('|')[4] == "2") {
             if ((x != 0 && x != 5) &&
-                (snapshot.data[x][dias[y]] != snapshot.data[x - 1][dias[y]])) {
+                (snapshot.data[x][dias[y]].split("|")[1] !=
+                    snapshot.data[x - 1][dias[y]].split("|")[1])) {
               lista.add(const StaggeredTile.count(1, 2));
               print("1,2");
             } else if ((x == 0 || x == 5)) {
@@ -59,7 +60,8 @@ class _GridViewsState extends State<GridViews> {
         }
         print(snapshot.data[x][dias[y]].split('|'));
       }
-      print(lista.length);
+      String listaL = lista.length.toString();
+      print("lista count: $listaL");
       return lista;
     }
 
@@ -111,8 +113,8 @@ class _GridViewsState extends State<GridViews> {
           if (snapshot.data[x][dias[y - 1]].split('|')[4] == "2") {
             //print(snapshot.data[x][dias[y - 1]]);
             if ((x != 0 && x != 5) &&
-                (snapshot.data[x][dias[y - 1]] !=
-                    snapshot.data[x - 1][dias[y - 1]])) {
+                (snapshot.data[x][dias[y - 1]].split("|")[1] !=
+                    snapshot.data[x - 1][dias[y - 1]].split("|")[1])) {
               lista.add(Center(
                   child: Tile(
                 index: dias[y - 1],
@@ -145,6 +147,8 @@ class _GridViewsState extends State<GridViews> {
           }
         }
       }
+      String listaL = lista.length.toString();
+      print("lista Tile: $listaL");
       return lista;
     }
 
