@@ -67,7 +67,17 @@ class _TileState extends State<Tile> {
       field2Controller.text = datos[0] as String;
 
       notasAdicionales = datos[2] as String;
+
       field3Controller.text = datos[2] as String;
+
+      if (datos[3] != "") {
+        int value = int.parse(datos[3], radix: 16);
+        pickerColor = new Color(value);
+        currentColor = new Color(value);
+      } else {
+        pickerColor = Colors.white;
+        currentColor = Colors.white;
+      }
     }
 
     double height = 0;
@@ -173,40 +183,33 @@ class _TileState extends State<Tile> {
               color: Colors.amber[300],
               onPressed: () {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  /*setState(() {
-                    departamento = field1Controller.text;
-                  });
-                  setState(() {
-                    profesor = field2Controller.text;
-                  });
-                  setState(() {
-                    notasAdicionales = field3Controller.text;
-                  });*/
                   setState(() {
                     departamento = field1Controller.text;
                     profesor = field2Controller.text;
                     notasAdicionales = field3Controller.text;
                     pickerColor = colorNuevo;
                   });
-                  //print(field1Controller.text);
-                  //print(field2Controller.text);
-                  //print(field3Controller.text);
-                  //print(index);
-                  //print(index + 8);
-                  String datos = field2Controller.text +
-                      "|" +
-                      field1Controller.text +
-                      "|" +
-                      field3Controller.text +
-                      "|" +
-                      colorNuevo.toString() +
-                      "|" +
-                      horas;
-                  updateAlbum(lista, index, datos, posX);
-
-                  Navigator.pop(context);
-                  //main();
                 });
+                //print(field1Controller.text);
+                //print(field2Controller.text);
+                //print(field3Controller.text);
+                //print(index);
+                //print(index + 8);
+                String colorString = colorNuevo.toString(); // Color(0x12345678)
+                String valueString = colorString.split('(0x')[1].split(')')[0];
+                String datos = field2Controller.text +
+                    "|" +
+                    field1Controller.text +
+                    "|" +
+                    field3Controller.text +
+                    "|" +
+                    valueString +
+                    "|" +
+                    horas;
+                updateAlbum(lista, index, datos, posX);
+
+                Navigator.pop(context);
+                //main();
               },
             )
           ],
