@@ -48,7 +48,7 @@ class _TileState extends State<Tile> {
   bool hasBeenPressed = false;
   Color colorNuevo;
   String dropdownValue = '';
-  String horas = "";
+  String horas = "1";
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +173,7 @@ class _TileState extends State<Tile> {
               color: Colors.amber[300],
               onPressed: () {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  setState(() {
+                  /*setState(() {
                     departamento = field1Controller.text;
                   });
                   setState(() {
@@ -181,7 +181,10 @@ class _TileState extends State<Tile> {
                   });
                   setState(() {
                     notasAdicionales = field3Controller.text;
-                  });
+                  });*/
+                  departamento = field1Controller.text;
+                  profesor = field2Controller.text;
+                  notasAdicionales = field3Controller.text;
                   pickerColor = colorNuevo;
                   //print(field1Controller.text);
                   //print(field2Controller.text);
